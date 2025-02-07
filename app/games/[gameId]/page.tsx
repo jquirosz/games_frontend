@@ -1,11 +1,11 @@
 'use client';
 
 import { useParams } from 'next/navigation'
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Link from "next/link";
 import {Header} from "../../../components/Header";
-import {Game} from "../../page";
 import {useAuth} from "react-oidc-context";
+import {Game} from "../../page";
 
 
 export default function GameDetailsPage() {
@@ -13,7 +13,7 @@ export default function GameDetailsPage() {
 
     const auth = useAuth();
   const params = useParams<{ gameId: string; }>();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<Game|null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
     const [refreshToggle, setRefreshToggle] = useState(true);
@@ -31,9 +31,11 @@ export default function GameDetailsPage() {
             body: JSON.stringify(bodyData),
         })
             .then((response) => response.json())
-            .then((response) => {
+            .then(() => {
                 userGames.push(gameId);
-                data.owned = true;
+                if(data!==null) {
+                    data.owned = true;
+                }
                 setRefreshToggle(!refreshToggle);
             });
     }
@@ -48,12 +50,15 @@ export default function GameDetailsPage() {
             headers: headers
         })
             .then((response) => response.json())
-            .then((response) => {
+            .then(() => {
                 const index = userGames.indexOf(5);
                 if (index > -1) { // only splice array when item is found
                     userGames.splice(index, 1); // 2nd parameter means remove one item only
                 }
-                data.owned = false;
+                if(data!==null) {
+                    data.owned = false;
+                }
+
                 setRefreshToggle(!refreshToggle);
             });
     }
@@ -81,7 +86,7 @@ export default function GameDetailsPage() {
             console.dir(userGames);
             setRefreshToggle(!refreshToggle);
         });
-        fetch(`${base_url}/games/${params.gameId}?user_id=${auth.user?.profile.sub}`)
+        fetch(`${base_url}/games/${params?.gameId}?user_id=${auth.user?.profile.sub}`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
@@ -99,7 +104,7 @@ export default function GameDetailsPage() {
   return (
       <>
           <header>
-              <Header setUserGames={setUserGames} callback={()=>{console.log("cb");console.dir(userGames);}} setUserGameDetails={()=>{}} />
+              <Header setUserGames={setUserGames} setUserGameDetails={()=>{}} />
           </header>
           <main className="flex min-h-screen flex-col items-center justify-between p-24 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" >
               <div
@@ -140,9 +145,10 @@ export default function GameDetailsPage() {
               {data.is_expansion && <div className="p-5 col-span-full">
               <h2 className="col-span-full">Expansion of</h2>
                   <ul className="space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 columns-1 sm:columns-2 md:columns-3 lg:columns-4">
-                      {data.parent_game.map((parent: any) => (
-                          <li className={userGames.includes(parseInt(parent['@objectid']))? "list-item col-span-2 text-green-600" : "list-item col-span-2"} key={parent['@objectid']}><Link
-                              href={`/games/${parent['@objectid']}`}>{parent['#text']}</Link></li>
+                      {data.parent_game.map((parent: { id:string
+                      name:string}) => (
+                          <li className={userGames.includes(parseInt(parent.id))? "list-item col-span-2 text-green-600" : "list-item col-span-2"} key={parent.id}><Link
+                              href={`/games/${parent.id}`}>{parent.name}</Link></li>
                       ))}
                   </ul>
               </div>}
@@ -150,10 +156,11 @@ export default function GameDetailsPage() {
               {data.expansions.length > 0 && <div className="p-5 col-span-full">
                   <h2>Expansions</h2>
               <ul className="space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 columns-1 sm:columns-2 md:columns-3 lg:columns-4">
-                  {data.expansions.map((expansion: any) => (
+                  {data.expansions.map((expansion: { id:string
+                      name:string}) => (
 
-                  <li className={userGames.includes(parseInt(expansion['@objectid']))? "list-item col-span-2 text-green-600" : "list-item col-span-2"} key={expansion['@objectid']}><Link
-                      href={`/games/${expansion['@objectid']}`}>{expansion['#text']}</Link></li>
+                  <li className={userGames.includes(parseInt(expansion.id))? "list-item col-span-2 text-green-600" : "list-item col-span-2"} key={expansion.id}><Link
+                      href={`/games/${expansion.id}`}>{expansion.name}</Link></li>
               ))}
               </ul>
               </div>}

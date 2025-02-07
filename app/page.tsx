@@ -22,12 +22,16 @@ export interface Game{
     playing_time: number
     is_expansion: boolean
     loaded: boolean
+    owned: boolean
+    description: string
+    parent_game: []
+    expansions: []
 }
 
 export default function Home() {
     const base_url = process.env.NEXT_PUBLIC_SERVICE_HOST;
     const auth = useAuth();
-  const [cardData, setCardData] = useState<any>([]);
+  const [cardData, setCardData] = useState<Game[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [userGames, setUserGames] = useState<number[]>([]);
@@ -73,22 +77,24 @@ export default function Home() {
         const headers = new Headers({ 'Content-Type': 'application/json' });
 
         const bodyData = cardData.find((game: Game) => {return game.id == gameId});
-        fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(bodyData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                userGames.push(gameId);
-                userGameDetails.push(bodyData);
-                setRefreshToggle(!refreshToggle);
-            });
+        if(bodyData){
+            fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(bodyData),
+            })
+                .then((response) => response.json())
+                .then(() => {
+                    userGames.push(gameId);
+                    userGameDetails.push(bodyData);
+                    setRefreshToggle(!refreshToggle);
+                });
+        }
     }
 
     useEffect(() => {
         loadUserGames();
-    }, [userGames]);
+    }, [userGames, loadUserGames]);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,8 +118,8 @@ export default function Home() {
   return (
     <div>
         <header>
-            <Header setUserGames={setUserGames} callback={loadUserGames} setUserGameDetails={setUserGameDetails} />
-            <SearchHeader handleSearch={handleSearch} searchTerm={searchTerm} setSearchTerm={setSearchTerm} expansions_chk={expansions_chk} setExpansions_chk={setExpansions_chk} userGames={userGames} loadUserGames={loadUserGames}/>
+            <Header setUserGames={setUserGames} setUserGameDetails={setUserGameDetails} />
+            <SearchHeader handleSearch={handleSearch} searchTerm={searchTerm} setSearchTerm={setSearchTerm} expansions_chk={expansions_chk} setExpansions_chk={setExpansions_chk} loadUserGames={loadUserGames}/>
         </header>
         <main className="flex min-h-svh flex-col items-center justify-between p-24">
         {loading && <p>Loading...</p>}

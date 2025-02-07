@@ -1,4 +1,6 @@
-export function SearchHeader(props) {
+import { FormEventHandler } from "react";
+
+export function SearchHeader(props: { handleSearch: FormEventHandler<HTMLFormElement> | undefined; searchTerm: string | number | readonly string[] | undefined; setSearchTerm: (arg0: string) => void; expansions_chk: boolean | undefined; setExpansions_chk: (arg0: boolean) => void; loadUserGames: () => void; }) {
 
     return <>
         <form className="max-w-md mx-auto" onSubmit={props.handleSearch}>

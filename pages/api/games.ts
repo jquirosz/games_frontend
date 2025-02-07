@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+// @ts-expect-error Server-side request
 import xml2json from 'xml2json';
 
 export default async function handler(
@@ -12,14 +13,16 @@ export default async function handler(
     const json = JSON.parse(jsonString);
     const boardgame = json.boardgames.boardgame
 
-    let name = boardgame.name;
+    let name:Array<object>|string|undefined = boardgame.name;
     if (Array.isArray(name)) {
-        const names:Array<object> = boardgame.name;
-        name = names.filter(name => name.primary === 'true')[0]['$t'];
+        const names:Array<{ primary:string }> = boardgame.name;
+        const nameTemp:object = names.filter(name => name.primary === 'true')[0];
+        // @ts-expect-error the datasource has it as a key
+        name = nameTemp['$t'];
     }
     let isExpansion = false;
     if (Array.isArray(boardgame.boardgameexpansion)) {
-        const filterExpansions = boardgame.boardgameexpansion.filter(expansion => expansion.inbound === 'true');
+        const filterExpansions = boardgame.boardgameexpansion.filter((expansion: { inbound: string; }) => expansion.inbound === 'true');
         if (filterExpansions.length > 0) {
             isExpansion = true;
         }

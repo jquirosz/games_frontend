@@ -1,8 +1,9 @@
 import {useAuth} from "react-oidc-context";
 import {useState} from "react";
 import {User} from "oidc-client-ts";
+import {Game} from "../app/page";
 
-export function Header(props) {
+export function Header(props: { setUserGameDetails: (arg0: Game[]) => void; setUserGames: (arg0: number[]) => void; }) {
     const base_url = process.env.NEXT_PUBLIC_SERVICE_HOST;
 
     const auth = useAuth();
