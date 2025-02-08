@@ -73,22 +73,18 @@ export default function Home() {
   }
 
   const addGameToCollection = (gameId: number) => {
-        const url =`${base_url}/users/${auth.user?.profile.sub}/games/${gameId}`;
-        const headers = new Headers({ 'Content-Type': 'application/json' });
-
-        const bodyData = cardData.find((game: Game) => {return game.id == gameId});
-        if(bodyData){
-            fetch(url, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(bodyData),
-            })
-                .then((response) => response.json())
-                .then(() => {
-                    userGames.push(gameId);
-                    userGameDetails.push(bodyData);
+    const bodyData = cardData.find((game: Game) => {return game.id == gameId});
+    if(bodyData){
+        fetch(`api/collection?gameId=${gameId}&userId=${auth.user?.profile.sub}`,{
+            method: 'POST',
+            body: JSON.stringify(bodyData)
+        })
+            .then((response) => response.json())
+            .then(() => {
+                userGames.push(gameId);
+                userGameDetails.push(bodyData);
                     setRefreshToggle(!refreshToggle);
-                });
+            });
         }
     }
 
