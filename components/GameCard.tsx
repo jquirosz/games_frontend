@@ -20,7 +20,7 @@ export function GameCard(props: { game: { loaded: boolean; status:number; id: Ke
                 Playtime(minutes): {props.game.min_playtime} to {props.game.max_playtime}<br />
                 Average time {props.game.playing_time} minutes <br />
                 {props.game.year}<br/>
-                {status[props.game.status.toString()]}<br/>
+                {status[props.game.status?.toString()]}<br/>
             </p>
 
         </div>
