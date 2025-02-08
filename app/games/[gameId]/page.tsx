@@ -108,7 +108,7 @@ export default function GameDetailsPage() {
                       </div>
                       <div className="p-5 md:col-span-2">
                           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.name} ({data.year})</h5>
-                          <LinearSelector title="" selectedItem={data.status} setSelectedItem={(a:number) => {} } data={[
+                          <LinearSelector title="" selectedItem={data.status} setSelectedItem={(a:number) => {console.log(a)} } data={[
                               { name: "Wish List", id: 1},
                               { name: "Pledged", id: 2},
                               { name: "Purchased", id: 3},
