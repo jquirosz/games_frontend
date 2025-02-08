@@ -6,6 +6,7 @@ import Link from "next/link";
 import {Header} from "../../../components/Header";
 import {useAuth} from "react-oidc-context";
 import {Game} from "../../page";
+import {LinearSelector} from "../../../components/LinearSelector";
 
 
 export default function GameDetailsPage() {
@@ -106,14 +107,17 @@ export default function GameDetailsPage() {
                           <img className="rounded-t-lg" src={data.image} alt=""/>
                       </div>
                       <div className="p-5 md:col-span-2">
-                          <a href={`/games/${data.id}`}>
-                              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.name}</h5>
-                          </a>
+                          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.name} ({data.year})</h5>
+                          <LinearSelector title="" selectedItem={data.status} setSelectedItem={(a:number) => {} } data={[
+                              { name: "Wish List", id: 1},
+                              { name: "Pledged", id: 2},
+                              { name: "Purchased", id: 3},
+                              { name: "Shelf of shame", id: 4},
+                              { name: "Played", id: 5}]} />
                           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                              {data.year}<br/>
                               Player Count: {data.min_players} to {data.max_players}<br/>
-                              Playtime(minutes): {data.min_playtime} to {data.max_playtime}<br/>
-                              Average time {data.playing_time} minutes
+                              Playtime(minutes): {data.min_playtime} to {data.max_playtime} Average: {data.playing_time} <br />
+                              <a className="text-green-800" href={"https://boardgamegeek.com/boardgame/"+data.id}>BGG Link</a>
                           </p>
                           {(auth.isAuthenticated && !data.owned) && <a
                               onClick={() => addGameToCollection(data.id)}
