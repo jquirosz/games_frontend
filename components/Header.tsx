@@ -58,6 +58,7 @@ export function Header(props: { setUserGameDetails: (arg0: Game[]) => void; setU
                 setUserData(auth.user)
                 loadUser();
             } else {
+                auth.signinRedirect();
             }
         }
     }
@@ -77,7 +78,7 @@ export function Header(props: { setUserGameDetails: (arg0: Game[]) => void; setU
     }
 
 
-    return <>
+    return <div className="text-right max-w-full p-5 mx-auto">
         {login()}
-    </>
+    </div>
 }

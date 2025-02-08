@@ -42,7 +42,8 @@ export default async function handler(
             max_playtime: boardgame.maxplaytime,
             playing_time: boardgame.playing_time,
             is_expansion: isExpansion,
-            loaded: true
+            loaded: true,
+            status: -1
         }
 
     res.status(200).json(game)

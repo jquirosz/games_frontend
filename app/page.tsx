@@ -26,21 +26,26 @@ export interface Game{
     description: string
     parent_game: []
     expansions: []
+    status: number
 }
 
 export default function Home() {
-    const base_url = process.env.NEXT_PUBLIC_SERVICE_HOST;
-    const auth = useAuth();
+  const base_url = process.env.NEXT_PUBLIC_SERVICE_HOST;
+  const auth = useAuth();
+
   const [cardData, setCardData] = useState<Game[]>([]);
+  const [displayGames, setDisplayGames] = useState<Game[]>([]);
+  const [userGameDetails, setUserGameDetails] = useState<Game[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [userGames, setUserGames] = useState<number[]>([]);
-  const [userGameDetails, setUserGameDetails] = useState<Game[]>([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [expansions_chk, setExpansions_chk] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState(-1);
+  const [selectedPlayerCount, setSelectedPlayerCount] = useState(-1);
   const [refreshToggle, setRefreshToggle] = useState(true);
-  const [resultCount, setResultCount] = useState(0);
+
 
   const router = useRouter();
 
@@ -57,6 +62,7 @@ export default function Home() {
                     game.max_playtime = responseData.max_playtime;
                     game.playing_time = responseData.playing_time;
                     game.is_expansion = responseData.is_expansion;
+                    game.status = -1
                     setRefreshToggle(!refreshToggle);
                   }
               })
@@ -68,8 +74,7 @@ export default function Home() {
   const loadUserGames = () => {
       const sorted: Game[] =userGameDetails.sort((a : Game, b : Game) => {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);});
       setUserGameDetails(sorted);
-      setCardData(sorted);
-      setResultCount(userGameDetails.length);
+      showResults(userGameDetails);
   }
 
   const addGameToCollection = (gameId: number) => {
@@ -89,6 +94,10 @@ export default function Home() {
     }
 
     useEffect(() => {
+        showResults(displayGames);
+    }, [selectedStatus, selectedPlayerCount, expansions_chk]);
+
+    useEffect(() => {
         loadUserGames();
     }, [userGames]);
 
@@ -101,8 +110,7 @@ export default function Home() {
       fetch(`${base_url}/games?name=${searchTerm}`)
         .then((response) => response.json())
         .then((data) => {
-            setCardData(data);
-            setResultCount(data.length);
+            showResults(data);
             setLoading(false);
         }).catch((fetchError) => {
           setLoading(false);
@@ -111,15 +119,32 @@ export default function Home() {
     }
   }
 
+  const showResults = (games: Game[]) => {
+    setDisplayGames(games);
+    let filteredGames: Game[] = games;
+    if (selectedStatus != -1) {
+        filteredGames = filteredGames.filter((game: Game) => game.status === selectedStatus);
+    }
+    if (selectedPlayerCount != -1) {
+        filteredGames = filteredGames.filter((game: Game) => selectedPlayerCount>=game.min_players && selectedPlayerCount<=game.max_players);
+    }
+    if (!expansions_chk) {
+        filteredGames = filteredGames.filter((game: Game) => !game.is_expansion);
+    }
+    setCardData(filteredGames);
+  }
+
   return (
     <div>
         <header>
             <Header setUserGames={setUserGames} setUserGameDetails={setUserGameDetails} />
-            <SearchHeader handleSearch={handleSearch} searchTerm={searchTerm} setSearchTerm={setSearchTerm} expansions_chk={expansions_chk} setExpansions_chk={setExpansions_chk} loadUserGames={loadUserGames}/>
+            <SearchHeader handleSearch={handleSearch} searchTerm={searchTerm} setSearchTerm={setSearchTerm} expansions_chk={expansions_chk} setExpansions_chk={setExpansions_chk}
+                          loadUserGames={loadUserGames} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus}
+                          selectedPlayerCount={selectedPlayerCount} setSelectedPlayerCount={setSelectedPlayerCount} />
         </header>
-        <main className="flex min-h-svh flex-col items-center justify-between p-24">
+        <main className="flex min-h-svh flex-col items-center justify-between p-24 pt-0">
         {loading && <p>Loading...</p>}
-            <p className="font-bold p-2" >Showing {resultCount} results</p>
+            <p className="font-bold p-2" >Showing {cardData.length} of {displayGames.length} results</p>
         {cardData && <div id="card-grid" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {cardData.map((game: Game) => (
             <GameCard key={game.id} showExpansions={expansions_chk} game={game} authenticated={auth.isAuthenticated} owned={userGames.includes(game.id)} addGameToCollection={addGameToCollection} loadGame={loadGame} />
