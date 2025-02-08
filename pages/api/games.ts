@@ -7,6 +7,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
 
+    console.dir(req);
     const response:Response = await fetch(`${process.env.NEXT_PUBLIC_BGG_URL}/boardgame/${req.query.gameId}`);
     const textResponse = await response.text();
     const jsonString = xml2json.toJson(textResponse);
