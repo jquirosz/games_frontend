@@ -94,7 +94,7 @@ export default function Home() {
 
     useEffect(() => {
         loadUserGames();
-    }, [userGames, loadUserGames]);
+    }, [userGames]);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
