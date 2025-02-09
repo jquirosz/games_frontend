@@ -21,6 +21,21 @@ export default function GameDetailsPage() {
 
   const [userGames, setUserGames] = useState<number[]>([]);
 
+    const updateGameStatus = (status: number) => {
+        const bodyData = data;
+        fetch(`../api/gameStatus?gameId=${data?.id}&userId=${auth.user?.profile.sub}&status=${status}`, {
+            method: 'POST',
+            body: JSON.stringify(bodyData)
+        })
+            .then((response) => response.json())
+            .then(() => {
+                if (data !== null) {
+                    data.status = status;
+                    setRefreshToggle(!refreshToggle);
+                }
+            });
+    }
+
     const addGameToCollection = (gameId: number) => {
         const bodyData = data;
         fetch(`../api/collection?gameId=${gameId}&userId=${auth.user?.profile.sub}`,{
@@ -36,7 +51,6 @@ export default function GameDetailsPage() {
                 setRefreshToggle(!refreshToggle);
             });
     }
-
 
     const removeGameFromCollection = (gameId: number) => {
         fetch(`../api/collection?gameId=${gameId}&userId=${auth.user?.profile.sub}`,{
@@ -108,7 +122,7 @@ export default function GameDetailsPage() {
                       </div>
                       <div className="p-5 md:col-span-2">
                           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.name} ({data.year})</h5>
-                          <LinearSelector title="" selectedItem={data.status} setSelectedItem={(a:number) => {console.log(a)} } data={[
+                          <LinearSelector title="" selectedItem={data.status} setSelectedItem={updateGameStatus} data={[
                               { name: "Wish List", id: 1},
                               { name: "Pledged", id: 2},
                               { name: "Purchased", id: 3},
