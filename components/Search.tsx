@@ -1,7 +1,7 @@
 import { FormEventHandler } from "react";
 import {LinearSelector} from "./LinearSelector";
 
-export function SearchHeader(props: { handleSearch: FormEventHandler<HTMLFormElement> | undefined; searchTerm: string | number | readonly string[] | undefined; setSearchTerm: (searchTerm: string) => void; expansions_chk: boolean | undefined; setExpansions_chk: (expansions: boolean) => void; loadUserGames: () => void; selectedStatus:number; setSelectedStatus: (status: number) => void; selectedPlayerCount:number; setSelectedPlayerCount:(selectedPlayerCount: number) => void;} ) {
+export function SearchHeader(props: { handleSearch: FormEventHandler<HTMLFormElement> | undefined; searchTerm: string | number | readonly string[] | undefined; setSearchTerm: (searchTerm: string) => void; expansions_chk: boolean | undefined; setExpansions_chk: (expansions: boolean) => void; loadUserGames: () => void; selectedStatus:number; setSelectedStatus: (status: number) => void; selectedPlayerCount:number; setSelectedPlayerCount:(selectedPlayerCount: number) => void; selectedLetter: number, setSelectedLetter:(letter:number)=>void;} ) {
     return <div className="p-5 m-auto rounded-3xl mt-5 bg-slate-700 w-fit ">
         <form className="max-w-md mx-auto mb-5" onSubmit={props.handleSearch}>
             <label htmlFor="default-search"
@@ -41,6 +41,34 @@ export function SearchHeader(props: { handleSearch: FormEventHandler<HTMLFormEle
                 { name: "4", id: 4},
                 { name: "5", id: 5},
                 { name: "6", id: 6}]} />
+            <LinearSelector title="" selectedItem={props.selectedLetter} setSelectedItem={props.setSelectedLetter} data={[
+                { name: "All", id: -1},
+                { name: "A", id: 0},
+                { name: "B", id: 1},
+                { name: "C", id: 2},
+                { name: "D", id: 3},
+                { name: "E", id: 4},
+                { name: "F", id: 5},
+                { name: "G", id: 6},
+                { name: "H", id: 7},
+                { name: "I", id: 8},
+                { name: "J", id: 9},
+                { name: "K", id: 10},
+                { name: "L", id: 11},
+                { name: "M", id: 12},
+                { name: "N", id: 13},
+                { name: "O", id: 14},
+                { name: "P", id: 15},
+                { name: "Q", id: 16},
+                { name: "R", id: 17},
+                { name: "S", id: 18},
+                { name: "T", id: 19},
+                { name: "U", id: 20},
+                { name: "V", id: 21},
+                { name: "W", id: 22},
+                { name: "X", id: 23},
+                { name: "Y", id: 24},
+                { name: "Z", id: 25}]} />
             <button onClick={() => props.loadUserGames()}
                     className="font-bold pl-4 pr-4 text-white rounded-full bg-stone-600 p-2">My
                 games

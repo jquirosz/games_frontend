@@ -41,9 +41,10 @@ export default function Home() {
   const [userGames, setUserGames] = useState<number[]>([]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [expansions_chk, setExpansions_chk] = useState(true);
+  const [expansions_chk, setExpansions_chk] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(-1);
   const [selectedPlayerCount, setSelectedPlayerCount] = useState(-1);
+  const [selectedLetter, setSelectedLetter] = useState(-1);
   const [refreshToggle, setRefreshToggle] = useState(true);
 
 
@@ -95,7 +96,7 @@ export default function Home() {
 
     useEffect(() => {
         showResults(displayGames);
-    }, [selectedStatus, selectedPlayerCount, expansions_chk]);
+    }, [selectedStatus, selectedPlayerCount, expansions_chk, selectedLetter]);
 
     useEffect(() => {
         loadUserGames();
@@ -122,15 +123,21 @@ export default function Home() {
   const showResults = (games: Game[]) => {
     setDisplayGames(games);
     let filteredGames: Game[] = games;
+    if (!expansions_chk) {
+        filteredGames = filteredGames.filter((game: Game) => !game.is_expansion);
+    }
     if (selectedStatus != -1) {
         filteredGames = filteredGames.filter((game: Game) => game.status === selectedStatus);
     }
     if (selectedPlayerCount != -1) {
         filteredGames = filteredGames.filter((game: Game) => selectedPlayerCount>=game.min_players && selectedPlayerCount<=game.max_players);
     }
-    if (!expansions_chk) {
-        filteredGames = filteredGames.filter((game: Game) => !game.is_expansion);
+    if (selectedLetter != -1) {
+        const letter = String.fromCharCode(65+selectedLetter);
+        console.log(letter);
+        filteredGames = filteredGames.filter((game: Game) => game.name.toUpperCase().startsWith(letter));
     }
+
     setCardData(filteredGames);
   }
 
@@ -140,7 +147,8 @@ export default function Home() {
             <Header setUserGames={setUserGames} setUserGameDetails={setUserGameDetails} />
             <SearchHeader handleSearch={handleSearch} searchTerm={searchTerm} setSearchTerm={setSearchTerm} expansions_chk={expansions_chk} setExpansions_chk={setExpansions_chk}
                           loadUserGames={loadUserGames} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus}
-                          selectedPlayerCount={selectedPlayerCount} setSelectedPlayerCount={setSelectedPlayerCount} />
+                          selectedPlayerCount={selectedPlayerCount} setSelectedPlayerCount={setSelectedPlayerCount}
+                          selectedLetter={selectedLetter} setSelectedLetter={setSelectedLetter} />
         </header>
         <main className="flex min-h-svh flex-col items-center justify-between p-24 pt-0">
         {loading && <p>Loading...</p>}
@@ -152,6 +160,9 @@ export default function Home() {
     </div>
 }
 </main>
+        <footer>
+            <img src="https://cf.geekdo-images.com/HZy35cmzmmyV9BarSuk6ug__thumb/img/gbE7sulIurZE_Tx8EQJXnZSKI6w=/fit-in/200x150/filters:strip_icc()/pic7779581.png" className="w-48 m-auto rounded-2xl bg-white" />
+        </footer>
 </div>
 )
     ;

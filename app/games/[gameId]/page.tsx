@@ -181,6 +181,9 @@ export default function GameDetailsPage() {
               </div>}
               </div>
           </main>
+          <footer>
+              <img src="https://boardgamegeek.com/image/7779581/dakarp" className="w-5" />
+          </footer>
       </>
 
 );

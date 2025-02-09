@@ -1,4 +1,4 @@
-export function LinearSelector(props:{selectedItem:number; setSelectedItem: (id: number) => void; data: {name:string; id:number;}[]; title:string}) {
+export function LinearSelector(props:{selectedItem:number; setSelectedItem: (id: number ) => void; data: {name:string; id:number;}[]; title:string}) {
 
     return <div className="m-1 rounded-full bg-stone-600 pt-0.5 pb-0.5 pl-2 pr-2 w-fit">
             {(props.title) && <span className="pr-2 pl-2 font-bold">{props.title}</span>}
