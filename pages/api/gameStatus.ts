@@ -5,7 +5,6 @@ export default async function handler(
     res: NextApiResponse
 ) {
 
-    console.dir(req.query);
     const response:Response = await fetch(`${process.env.NEXT_PUBLIC_SERVICE_HOST}/users/${req.query.userId}/games/${req.query.gameId}/status/${req.query.status}`, {
         method: 'PUT'
     });

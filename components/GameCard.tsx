@@ -16,9 +16,9 @@ export function GameCard(props: { game: { loaded: boolean; status:number; id: Ke
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{props.game.name}</h5>
             </a>
             <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                Player Count: {props.game.min_players} to {props.game.max_players}<br/>
-                Playtime(minutes): {props.game.min_playtime} to {props.game.max_playtime}<br />
-                Average time {props.game.playing_time} minutes <br />
+                Player Count: {props.game.min_players} - {props.game.max_players}<br/>
+                Playtime(min): {props.game.min_playtime} - {props.game.max_playtime}
+                {props.game.playing_time && <>(Avg. {props.game.playing_time})</>}<br />
                 {props.game.year}<br/>
                 {status[props.game.status?.toString()]}<br/>
             </p>
