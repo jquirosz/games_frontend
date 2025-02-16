@@ -40,7 +40,8 @@ export function SearchHeader(props: { handleSearch: FormEventHandler<HTMLFormEle
                 { name: "3", id: 3},
                 { name: "4", id: 4},
                 { name: "5", id: 5},
-                { name: "6", id: 6}]} />
+                { name: "6", id: 6},
+                { name: "7", id: 7}]} />
             <LinearSelector title="" selectedItem={props.selectedLetter} setSelectedItem={props.setSelectedLetter} data={[
                 { name: "All", id: -1},
                 { name: "A", id: 0},

@@ -21,6 +21,8 @@ export function GameCard(props: { game: { loaded: boolean; status:number; id: Ke
                 {props.game.playing_time && <>(Avg. {props.game.playing_time})</>}<br />
                 {props.game.year}<br/>
                 {status[props.game.status?.toString()]}<br/>
+                <a target="_blank" className="text-green-800" href={"https://boardgamegeek.com/boardgame/"+props.game.id}>See in BGG</a><br />
+                <br />
             </p>
 
         </div>
