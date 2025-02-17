@@ -150,7 +150,7 @@ export default function Home() {
                           selectedPlayerCount={selectedPlayerCount} setSelectedPlayerCount={setSelectedPlayerCount}
                           selectedLetter={selectedLetter} setSelectedLetter={setSelectedLetter} />
         </header>
-        <main className="flex min-h-svh flex-col items-center justify-between p-24 pt-0">
+        <main className="flex min-h-svh flex-col items-center justify-between p-5 md:p-24 pt-0">
         {loading && <p>Loading...</p>}
             <p className="font-bold p-2" >Showing {cardData.length} of {displayGames.length} results</p>
         {cardData && <div id="card-grid" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">

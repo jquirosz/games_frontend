@@ -113,7 +113,7 @@ export default function GameDetailsPage() {
           <header>
               <Header setUserGames={setUserGames} setUserGameDetails={()=>{}} />
           </header>
-          <main className="flex min-h-screen flex-col items-center justify-between p-24" >
+          <main className="flex min-h-screen flex-col items-center justify-between p-5 md:p-24" >
               <div className="w-full col-span-full md:w-8/12 m-auto">
                   <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                       <div
