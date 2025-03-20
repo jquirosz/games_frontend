@@ -1,5 +1,7 @@
 This is the frontend for the game tracker application. It allows you to have a web client for the backend services at https://github.com/jquirosz/games_backend.
 
+Authentication is managed by AWS Cognito
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
